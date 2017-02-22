@@ -20,5 +20,18 @@ the usage of this project.
   $ python paper-sync.py DROPBOX_API_TOKEN path/to/data/directory/
   ```
 
+License:
+========
+
+This project is licensed under MIT License. Please see the LICENSE file for a
+complete copy of license.
+
+_Note_: This project depends on a version of dropbox-python-sdk that is not yet
+released. You will have to build a new copy of it's sdk if you want to run this
+project and then install the library from source. [Here][1] you can find how to
+do that. I would recommend running this inside a [virtualenv][2]
+
 
 [0]: https://paper.dropbox.com
+[1]: https://github.com/dropbox/dropbox-sdk-python#updating-api-specification
+[2]: https://github.com/pypa/virtualenv
