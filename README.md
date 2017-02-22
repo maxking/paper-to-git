@@ -9,6 +9,9 @@ This is an effort to create and automate Paper->Github Pages workflow, where I
 can create and publish my blog posts by writing them in dropbox paper and
 automatically fetching it from there and publishing it Github.
 
+_Current State_: This project is currently in its very initial stages and
+nothing is guaranteed to work. I will update this as the project moves forward.
+
 Scripts:
 ========
 These are a few test/example scripts that I have written to check/demonstrate
