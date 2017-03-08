@@ -2,16 +2,21 @@
 
 """
 
-
 import os
 import re
 import dropbox
-import contextlib
 
 from dropbox.paper import ExportFormat
+from paper_to_git.models import PaperDoc, PaperFolder
+
+
+__all__ = [
+    'sync',
+]
 
 
 DATA_DIR = '/home/maxking/Documents/dropbox-sdk-python/data/'
+
 
 def get_dropbox_handle(access_token):
     """Given an access_token returns an instance of dropbox.Dropbox
@@ -135,5 +140,19 @@ def title_to_name(title, file_extension='.md'):
     regex = re.compile('[\s+,.]')
     return regex.sub('-', title.strip()) + file_extension
 
-if __name__ == '__main__':
-    main()
+
+def sync_upates(dbx):
+    """
+    This function synchronizes all the documents from dropbox paper and updates
+    their version numbers in the database. It does not actually downloads the
+    updated document from dropbox. It returns the list of updated entries.
+
+    Args:
+        dbx(dropbox.Dropbox):  an instance of initialized dropbox handler
+
+
+    Returns:
+        A list of document ids that changed.
+
+    """
+    pass
