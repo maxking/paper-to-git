@@ -19,7 +19,7 @@ from string import Template
 __all__ = [
     'BaseConfig',
     'TestingConfig',
-]
+    ]
 
 SPACERS = '\n'
 
