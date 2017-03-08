@@ -1,4 +1,4 @@
-Paper to Git
+Paper to Git ![Build Status](https://travis-ci.org/maxking/paper-to-git.svg?branch=master)
 ============
 
 This project aims to sync documents between [Dropbox Paper][0] and any local Git
