@@ -5,7 +5,7 @@ from peewee import SqliteDatabase
 
 __all__ = [
     'initialize'
-]
+    ]
 
 
 class BaseDatabase:

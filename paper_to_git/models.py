@@ -28,11 +28,11 @@ class PaperDoc(BasePaperModel):
     def __repr__(self):
         return "Document {} at version {}".format(self.title, self.version)
 
-
     def update(self):
         """
         Pull a list of all the docs from dropbox
         """
+        pass
 
 class PaperFolder(BasePaperModel):
     name = CharField()
