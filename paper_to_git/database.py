@@ -1,31 +1,28 @@
-from paper_to_git.config import config
-from paper_to_git.utilities import expand
+from paper_to_git.models import PaperDoc, PaperFolder
+from peewee import SqliteDatabase, OperationalError
 
-from peewee import SqliteDatabase
 
 __all__ = [
-    'initialize'
+    'BaseDatabase',
     ]
 
 
 class BaseDatabase:
     """The base database class to be used with Peewee.
     """
-    def __init__(self):
-        self.url = None
+    def __init__(self, url):
+        self.url = url
         self.db = None
 
     def initialize(self):
-        assert config.initialized
-        url = expand(config.database.url, config.paths)
-        self.url = url
         self.db = SqliteDatabase(self.url)
+        self._post_initialization()
         return self.db
 
-
-def initialize():
-    """
-    Global database initialization.
-    """
-    db = BaseDatabase()
-    return db.initialize()
+    def _post_initialization(self):
+        self.db.connect()
+        try:
+            self.db.create_tables([PaperDoc, PaperFolder])
+        except OperationalError:
+            # The database already exists.
+            pass

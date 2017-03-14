@@ -3,14 +3,17 @@
 
 import os
 import sys
+
 from contextlib import suppress
 from string import Template
 from pkg_resources import resource_listdir
+from paper_to_git.config import config
 
 __all__ = [
     'expand',
     'makedirs',
     'find_components',
+    'dropbox_api',
     ]
 
 
@@ -51,3 +54,33 @@ def find_components(package, base_class):
         if not hasattr(module, '__all__'):
             continue
         yield from scan_module(module, base_class)
+
+
+def dropbox_api(function):
+    """
+    Attach a global dropbox handler with the function.
+    """
+    def func_wrapper(*args, **kwargs):
+        print(config)
+        dbx = config.dbox.dbx
+        if len(args) > 0:
+            return function(args[0], dbx, *args[1:], **kws)
+        else:
+            return function(dbx, **kws)
+    return func_wrapper
+
+
+class dbconnection(object):
+    """
+    """
+    def __init__(self, f):
+        self.f = f
+
+    def __call__(self, *args, **kws):
+        db = config.db
+        db.connect()
+        if len(args) > 0:
+            self.f(args[0], db, *args[1:], **kws)
+        else:
+            self.f(db, **kws)
+        db.close()

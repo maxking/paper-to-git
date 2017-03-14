@@ -2,6 +2,7 @@
 """
 
 from paper_to_git.commands.base import BaseCommand
+from paper_to_git.models import PaperDoc
 
 
 __all__ = [
@@ -19,3 +20,5 @@ class UpdateCommand(BaseCommand):
 
     def process(self, args):
         print("Pulling the list of paper docs...")
+        for doc in PaperDoc.get_docs():
+            print(doc)

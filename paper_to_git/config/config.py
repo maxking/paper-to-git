@@ -40,6 +40,8 @@ class BaseConfig:
         self.create_paths = True
         self.filename = None
         self.initialized = False
+        self.dbox = None
+        self.db = None
 
     def __getattr__(self, name):
         return getattr(self._config, name)
