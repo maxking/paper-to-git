@@ -7,32 +7,48 @@ an excellent in-brownser markdown editor.
 
 This is an effort to create and automate Paper->Github Pages workflow, where I
 can create and publish my blog posts by writing them in dropbox paper and
-automatically fetching it from there and publishing it Github.
+automatically fetching it from there and publishing it in Github Pages.
 
 _Current State_: This project is currently in its very initial stages and
 nothing is guaranteed to work. I will update this as the project moves forward.
 
-Scripts:
-========
-These are a few test/example scripts that I have written to check/demonstrate
-the usage of this project.
+Install
+=======
+To install, try out the following commands:
 
-- `paper-sync.py`: sync all the documents to a local directory.
+```bash
+$ virtualenv dropbox-sdk --python=python3
+$ source dropbox-sdk/bin/activate
+$ python setup.py install
+```
 
-  ```bash
-  $ python paper-sync.py DROPBOX_API_TOKEN path/to/data/directory/
-  ```
+Usage
+=====
+
+You can run `paper_git --help` in the console to print out the following help
+text:
+
+```
+$ paper_git --help
+usage: paper_git [-h] {shell,update} ...
+
+        The Paper-to-Git system
+        Copyright 2017 Abhilash Raj
+
+optional arguments:
+  -h, --help      show this help message and exit
+
+Commands:
+  {shell,update}
+    shell         Start an interactive paper git shell.
+    update        Pull the list of Paper docs and update the database.
+```
 
 License:
 ========
 
 This project is licensed under MIT License. Please see the LICENSE file for a
 complete copy of license.
-
-_Note_: This project depends on a version of dropbox-python-sdk that is not yet
-released. You will have to build a new copy of it's sdk if you want to run this
-project and then install the library from source. [Here][1] you can find how to
-do that. I would recommend running this inside a [virtualenv][2]
 
 
 [0]: https://paper.dropbox.com
