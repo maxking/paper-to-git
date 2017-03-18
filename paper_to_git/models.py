@@ -4,6 +4,7 @@ import dropbox.exceptions
 
 from dropbox.paper import ExportFormat
 from paper_to_git.utilities.dropbox import dropbox_api
+from paper_to_git.config import config
 from peewee import (Model, CharField, ForeignKeyField, IntegerField)
 
 
@@ -18,7 +19,8 @@ class BasePaperModel(Model):
     be it folder or document subclass this. It provides some very basic
     functionalities.
     """
-    pass
+    class Meta:
+        database = config.db.db
 
 
 class PaperFolder(BasePaperModel):

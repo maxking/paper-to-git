@@ -77,7 +77,7 @@ class dbconnection(object):
         self.f = f
 
     def __call__(self, *args, **kws):
-        db = config.db
+        db = config.db.db
         db.connect()
         if len(args) > 0:
             self.f(args[0], db, *args[1:], **kws)

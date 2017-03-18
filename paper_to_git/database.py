@@ -1,4 +1,3 @@
-from paper_to_git.models import PaperDoc, PaperFolder
 from peewee import SqliteDatabase, OperationalError
 
 
@@ -10,16 +9,21 @@ __all__ = [
 class BaseDatabase:
     """The base database class to be used with Peewee.
     """
-    def __init__(self, url):
+    def __init__(self, url=None):
         self.url = url
-        self.db = None
+        self.db = SqliteDatabase(None)
 
-    def initialize(self):
-        self.db = SqliteDatabase(self.url)
+    def initialize(self, url=None):
+        if url is not None:
+            self.url = url
+        else:
+            raise ValueError
+        self.db.init(url)
         self._post_initialization()
         return self.db
 
     def _post_initialization(self):
+        from paper_to_git.models import PaperDoc, PaperFolder
         self.db.connect()
         try:
             self.db.create_tables([PaperDoc, PaperFolder])

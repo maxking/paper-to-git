@@ -15,6 +15,7 @@ from paper_to_git.utilities import makedirs
 from pkg_resources import resource_filename
 from string import Template
 
+from paper_to_git.database import BaseDatabase
 
 __all__ = [
     'BaseConfig',
@@ -41,7 +42,7 @@ class BaseConfig:
         self.filename = None
         self.initialized = False
         self.dbox = None
-        self.db = None
+        self.db = BaseDatabase(None)
 
     def __getattr__(self, name):
         return getattr(self._config, name)

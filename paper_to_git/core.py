@@ -5,7 +5,6 @@ import os
 import paper_to_git.config.config
 import paper_to_git.dropbox
 
-from paper_to_git.database import BaseDatabase
 from paper_to_git.utilities import expand
 
 __all__ = [
@@ -55,8 +54,6 @@ def initialize_2():
     url = expand(config.database.url, config.paths)
     # Instantiate the database class, then initialize it. Then stash the object
     # on the config object.
-    database = BaseDatabase(url)
-    database.initialize()
-    config.db = database.db
+    config.db.initialize(url)
     # Initialize the dropbox object and add it to the config.
     paper_to_git.dropbox.initialize()
