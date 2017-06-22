@@ -25,12 +25,12 @@ $ python setup.py install
 Usage
 =====
 
-You can run `paper_git --help` in the console to print out the following help
+You can run `paper-git --help` in the console to print out the following help
 text:
 
 ```
-$ paper_git --help
-usage: paper_git [-h] {shell,update} ...
+$ paper-git --help
+usage: paper-git [-h] {shell,update} ...
 
         The Paper-to-Git system
         Copyright 2017 Abhilash Raj
