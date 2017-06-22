@@ -143,10 +143,10 @@ class BaseConfig:
                 makedirs(path)
             # Create a paper-git.cfg file if it already doesn't exist.
             lock_file = os.path.join(self.VAR_DIR, 'paper-git-cfg.lck')
-            paper-git_cfg = os.path.join(self.ETC_DIR, 'paper-git.cfg')
+            paper_git_cfg = os.path.join(self.ETC_DIR, 'paper-git.cfg')
             with Lock(lock_file):
-                if not os.path.exists(paper-git_cfg):
-                    with open(paper-git_cfg, 'w') as fp:
+                if not os.path.exists(paper_git_cfg):
+                    with open(paper_git_cfg, 'w') as fp:
                         print(CFG_TEMPLATE, file=fp)
 
 

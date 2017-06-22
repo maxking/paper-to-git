@@ -1,4 +1,4 @@
-"""The paper-git command dispatcher"""
+"""The paper_git command dispatcher"""
 
 
 import argparse
@@ -9,7 +9,7 @@ from paper_to_git.utilities import find_components
 
 
 def main():
-    """The `paper-git command dispatcher."""
+    """The `paper_git command dispatcher."""
     parser = argparse.ArgumentParser(
         description="""\
         The Paper-to-Git system

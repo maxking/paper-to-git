@@ -12,7 +12,7 @@ def read(fname):
 
 template = Template("$script = paper_to_git.bin.$script:main")
 scripts = set(template.substitute(script=script)
-              for script in ('paper-git'))
+              for script in ('paper_git'))
 
 setup(
     name="paper_to_git",
@@ -27,7 +27,7 @@ setup(
     long_description=read('README.md'),
     entry_points={
         'console_scripts': [
-            "paper-git = paper_to_git.bin.paper-git:main",
+            "paper_git = paper_to_git.bin.paper_git:main",
             ],
         },
     classifiers=[
