@@ -1,9 +1,9 @@
 """The configuration file can be one of these places and are checked in the
 order mentioned below, if it is found, the search terminates:
 
-- $PWD/paper_git.cfg
-- $HOME/paper_git.cfg
-- /etc/paper_git.cfg
+- $PWD/paper-git.cfg
+- $HOME/paper-git.cfg
+- /etc/paper-git.cfg
  """
 
 import os
@@ -55,7 +55,7 @@ class BaseConfig:
         """
         schema_file = resource_filename('paper_to_git.config', 'schema.cfg')
         schema = ConfigSchema(schema_file)
-        config_file = resource_filename('paper_to_git.config', 'paper_git.cfg')
+        config_file = resource_filename('paper_to_git.config', 'paper-git.cfg')
         self._config = schema.load(config_file)
         if filename is None:
             self._post_process()
@@ -141,7 +141,7 @@ class BaseConfig:
         if self.create_paths:
             for path_name, path in self.paths.items():
                 makedirs(path)
-            # Create a paper_git.cfg file if it already doesn't exist.
+            # Create a paper-git.cfg file if it already doesn't exist.
             lock_file = os.path.join(self.VAR_DIR, 'paper-git-cfg.lck')
             paper_git_cfg = os.path.join(self.ETC_DIR, 'paper-git.cfg')
             with Lock(lock_file):

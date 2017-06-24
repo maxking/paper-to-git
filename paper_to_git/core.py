@@ -14,11 +14,11 @@ __all__ = [
 
 def search_for_configuration_file():
     """Search the file system for a configuration file to use."""
-    # ./paper_git.cfg
+    # ./paper-git.cfg
     config_path = os.path.abspath('paper-git.cfg')
     if os.path.exists(config_path):
         return config_path
-    # ./var/etc/paper_git.cfg
+    # ./var/etc/paper-git.cfg
     config_path = os.path.abspath(
         os.path.join('var', 'etc', 'paper-git.cfg'))
     if os.path.exists(config_path):
