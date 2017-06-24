@@ -2,8 +2,8 @@ Paper to Git ![Build Status](https://travis-ci.org/maxking/paper-to-git.svg?bran
 ============
 
 This project aims to sync documents between [Dropbox Paper][0] and any local Git
-repository. Why? Because apart from all other features that paper has, it is
-an excellent in-brownser markdown editor.
+repository. Why? Because apart from all other features that Paper has, it is
+an excellent in-browser markdown editor.
 
 This is an effort to create and automate Paper->Github Pages workflow, where I
 can create and publish my blog posts by writing them in dropbox paper and
