@@ -149,6 +149,21 @@ class BaseConfig:
                     with open(paper_git_cfg, 'w') as fp:
                         print(CFG_TEMPLATE, file=fp)
 
+    def write_to_user_config(self, section, key, value):
+        """Write the given key value pair under the given section to the
+        user's config file.
+        """
+        # Just to make sure that the config directories exist.
+        self.ensure_directories_exist()
+        # Acquire the lock to the config file before writing anything to it.
+        lock_file = os.path.join(self.VAR_DIR, 'paper-git-cfg.lck')
+        paper_git_cfg = os.path.join(self.ETC_DIR, 'paper-git.cfg')
+        with Lock(lock_file):
+            with open(paper_git_cfg, 'a') as fp:
+                print("""\
+[{section}]
+{key}: {value}""".format(section=section, key=key, value=value), file=fp)
+
 
 class TestingConfig(BaseConfig):
     DEBUG = True
