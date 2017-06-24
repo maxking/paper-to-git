@@ -5,7 +5,9 @@ import time
 import dropbox.exceptions
 
 from dropbox.paper import ExportFormat
+from git import Repo, GitCommandError
 from paper_to_git.utilities.dropbox import dropbox_api
+from paper_to_git.utilities.modules import create_file_name
 from paper_to_git.config import config
 from peewee import ( Model, CharField, ForeignKeyField, IntegerField,
                      TimestampField, PrimaryKeyField)
@@ -14,6 +16,7 @@ from peewee import ( Model, CharField, ForeignKeyField, IntegerField,
 __all__ = [
     'PaperDoc',
     'PaperFolder',
+    'Sync',
     ]
 
 
@@ -57,11 +60,10 @@ class PaperDoc(BasePaperModel):
         """Update this record with the latest version of the document. Also,
         download the latest version to the file.
         """
-        print('updating doc_id {}'.format(self.paper_id))
         title, rev = PaperDoc.download_doc(self.paper_id)
         if rev > self.version:
-            print('Update revision for doc_id: {0} from {1} to {2}'.format(
-                  self.paper_id, self.version, rev))
+            print('Update revision for doc {0} from {1} to {2}'.format(
+                  self.title, self.version, rev))
             self.version = rev
             self.last_updated = time.time()
         if self.title != title:
@@ -117,3 +119,39 @@ class PaperDoc(BasePaperModel):
         f = PaperFolder.get_or_create(folder_id=folder.id, name=folder.name)[0]
         self.folder = f
         self.save()
+
+
+class Sync(BasePaperModel):
+    """Representation of a synchronization between a Git repo and a
+    PaperFolder. Files are synchronized only after a few changes are made and
+    the metadata is added.
+
+    Files with #draft in them is not synchronized to the git repo.
+    """
+    # Path to the Git Repo.
+    repo = CharField()
+    # Path to the directories in the git repo.
+    path_in_repo = CharField()
+    folder = ForeignKeyField(PaperFolder)
+
+    def __repr__(self):
+        return "Git repo at {} to Folder {}".format(repo, folder.name)
+
+    def sync(self):
+        for doc in self.folder.docs:
+            original_path = PaperDoc.generate_file_path(doc.paper_id)
+            file_name = create_file_name(doc.title)
+            final_path = os.path.join(self.repo, self.path_in_repo, file_name)
+            with open(final_path, 'w') as fp:
+                with open(original_path, 'r') as op:
+                    print(op.read(), file=fp)
+        self.commit_changes()
+
+    def commit_changes(self):
+        git_repo = Repo(self.repo)
+        git_repo.git.add(A=True)
+        try:
+            git_repo.git.commit('-m', 'A random git message.')
+        except GitCommandError:
+            print('Nothing to commit')
+            pass

@@ -40,5 +40,6 @@ setup(
         'flufl.lock',
         'lazr.config',
         'peewee',
+        'GitPython'
         ]
     )

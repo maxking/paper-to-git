@@ -5,7 +5,7 @@ import argparse
 
 from paper_to_git.core import initialize
 from paper_to_git.commands.base import BaseCommand
-from paper_to_git.utilities import find_components
+from paper_to_git.utilities.modules import find_components
 
 
 def main():

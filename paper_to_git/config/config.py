@@ -2,8 +2,7 @@
 order mentioned below, if it is found, the search terminates:
 
 - $PWD/paper-git.cfg
-- $HOME/paper-git.cfg
-- /etc/paper-git.cfg
+- $PWD/var/etc/paper-git.cfg
  """
 
 import os
@@ -11,7 +10,7 @@ import sys
 
 from flufl.lock import Lock
 from lazr.config import ConfigSchema
-from paper_to_git.utilities import makedirs
+from paper_to_git.utilities.modules import makedirs
 from pkg_resources import resource_filename
 from string import Template
 

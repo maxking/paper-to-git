@@ -5,7 +5,7 @@ import os
 import paper_to_git.config.config
 import paper_to_git.dropbox
 
-from paper_to_git.utilities import expand
+from paper_to_git.utilities.modules import expand
 
 __all__ = [
     'initialize',
