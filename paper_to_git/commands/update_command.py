@@ -17,7 +17,14 @@ class UpdateCommand(BaseCommand):
 
     def add(self, parser, command_parser):
         self.parser = parser
+        command_parser.add_argument('--only-existing',
+            default=False, action='store_true',
+            help="""Only update the existing docs, don't pull any new ones.""")
 
     def process(self, args):
+        if args.only_existing:
+            for doc in PaperDoc.select():
+                doc.get_changes()
+            return
         print("Pulling the list of paper docs...")
         PaperDoc.sync_docs()
