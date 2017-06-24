@@ -7,8 +7,8 @@ import dropbox.exceptions
 from dropbox.paper import ExportFormat
 from paper_to_git.utilities.dropbox import dropbox_api
 from paper_to_git.config import config
-from peewee import (
-    Model, CharField, ForeignKeyField, IntegerField, TimestampField)
+from peewee import ( Model, CharField, ForeignKeyField, IntegerField,
+                     TimestampField, PrimaryKeyField)
 
 
 __all__ = [
@@ -29,6 +29,7 @@ class BasePaperModel(Model):
 class PaperFolder(BasePaperModel):
     """Representation of a Dropbox Paper folder"""
     name = CharField()
+    folder_id = CharField()
 
     def __repr__(self):
         return "Folder {}".format(self.name)
@@ -39,7 +40,7 @@ class PaperDoc(BasePaperModel):
     title = CharField()
     paper_id = CharField()
     version = IntegerField(default=0)
-    folder = ForeignKeyField(PaperFolder, null=True)
+    folder = ForeignKeyField(PaperFolder, null=True, related_name='docs')
     last_updated = TimestampField()
 
     def __init__(self, *args, **kwargs):
@@ -67,6 +68,7 @@ class PaperDoc(BasePaperModel):
             self.title = title
             self.last_updated = time.time()
         self.save()
+        self.update_folder_info()
 
     @classmethod
     def generate_file_path(self, doc_id):
@@ -91,6 +93,7 @@ class PaperDoc(BasePaperModel):
                 title, rev = self.download_doc(doc_id)
                 doc = PaperDoc.create(paper_id=doc_id, title=title, version=rev,
                                       last_updated=time.time())
+                doc.update_folder_info()
             print(doc)
 
     @classmethod
@@ -102,3 +105,15 @@ class PaperDoc(BasePaperModel):
         result = dbx.paper_docs_download_to_file(
             path, doc_id, ExportFormat.markdown)
         return (result.title, result.revision)
+
+    @dropbox_api
+    def update_folder_info(self, dbx):
+        """Fetch and update the folder information for the current PaperDoc.
+        """
+        folders = dbx.paper_docs_get_folder_info(self.paper_id)
+        if folders.folders is None:
+            return
+        folder = folders.folders[0]
+        f = PaperFolder.get_or_create(folder_id=folder.id, name=folder.name)[0]
+        self.folder = f
+        self.save()
