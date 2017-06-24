@@ -1,11 +1,14 @@
 """
 """
+import os
+import time
 import dropbox.exceptions
 
 from dropbox.paper import ExportFormat
 from paper_to_git.utilities.dropbox import dropbox_api
 from paper_to_git.config import config
-from peewee import (Model, CharField, ForeignKeyField, IntegerField)
+from peewee import (
+    Model, CharField, ForeignKeyField, IntegerField, TimestampField)
 
 
 __all__ = [
@@ -37,34 +40,41 @@ class PaperDoc(BasePaperModel):
     paper_id = CharField()
     version = IntegerField(default=0)
     folder = ForeignKeyField(PaperFolder, null=True)
+    last_updated = TimestampField()
 
-    def __init__(self, paper_id, *args, **kwargs):
-        super().__init__(paper_id, *args, **kwargs)
-        self.paper_id = paper_id
-        self._post_create()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def __repr__(self):
         return "Document {} at version {}".format(self.title, self.version)
 
-    def _post_create(self):
-        title, rev = self._get_doc_details()
-        self.title = title
-        self.version = rev
-        # self.save()
-        # TODO: Set paper folder also.
-
+    @classmethod
     def get_by_paper_id(self, paper_id):
         return PaperDoc.get(PaperDoc.paper_id == paper_id)
 
-    def update(self):
+    def get_changes(self):
+        """Update this record with the latest version of the document. Also,
+        download the latest version to the file.
         """
-        Pull a list of all the docs from dropbox
-        """
-        pass
+        print('updating doc_id {}'.format(self.paper_id))
+        title, rev = PaperDoc.download_doc(self.paper_id)
+        if rev > self.version:
+            print('Update revision for doc_id: {0} from {1} to {2}'.format(
+                  self.paper_id, self.version, rev))
+            self.version = rev
+            self.last_updated = time.time()
+        if self.title != title:
+            self.title = title
+            self.last_updated = time.time()
+        self.save()
+
+    @classmethod
+    def generate_file_path(self, doc_id):
+        return os.path.join(config.CACHE_DIR, doc_id + '.md')
 
     @classmethod
     @dropbox_api
-    def get_docs(self, dbx):
+    def sync_docs(self, dbx):
         """Fetches all the doc ids from the given dropbox handler.
         Args:
             dbx(dropbox.Dropbox): an instance of initialized dropbox handler
@@ -72,56 +82,23 @@ class PaperDoc(BasePaperModel):
             An array of all the doc ids.
         """
         docs = dbx.paper_docs_list()
-        for doc in docs.doc_ids:
+        for doc_id in docs.doc_ids:
             try:
-                yield PaperDoc.get(PaperDoc.paper_id == doc)
+                doc = PaperDoc.get(PaperDoc.paper_id == doc_id)
+                if not os.path.exists(self.generate_file_path(doc_id)):
+                    self.download_doc(doc_id)
             except PaperDoc.DoesNotExist:
-                yield PaperDoc(doc)
+                title, rev = self.download_doc(doc_id)
+                doc = PaperDoc.create(paper_id=doc_id, title=title, version=rev,
+                                      last_updated=time.time())
+            print(doc)
 
+    @classmethod
     @dropbox_api
-    def _get_doc_details(self, dbx):
-        """Returns the doc's title and revision number.
-
-        Args:
-            dbx(dropbox.Dropbox):  an instance of initialized dropbox handler
-            doc_id(str): document id of the document to retrieve title for.
-        Returns:
-            - The title (string) of the document.
-            - The current revision(int) number of the document.
-            - The list of folders that this document belongs to.
+    def download_doc(self, dbx, doc_id):
+        """Downloads the given doc_id to the local file cache.
         """
-        result, response = dbx.paper_docs_download(
-                           self.paper_id, ExportFormat.markdown)
-        if response.status_code == 200:
-            response.close()
-        else:
-            raise dropbox.exceptions.APIError
+        path = self.generate_file_path(doc_id)
+        result = dbx.paper_docs_download_to_file(
+            path, doc_id, ExportFormat.markdown)
         return (result.title, result.revision)
-
-    # def sync(self, dbx, ids=None, export_format=ExportFormat.markdown):
-    #     """Sync the documents in the data directory with proper directory structure as
-    #     found in Dropbox Paper. Sync only the given ids if Arg(id) is not None.
-
-    #     It return aises ValueError if one or more of the IDs are not found.
-
-    #     Args:
-    #         dbx(dropbox.Dropbox):  an instance of initialized dropbox handler
-    #         ids([str]): A list of document ids(strings).
-
-    #     Returns:
-    #         None
-
-    #     Raises:
-    #         ValueError
-    #     """
-    #     # TODO: validate the input to be a list of strings.
-    #     for doc_id in get_doc_ids(dbx):
-    #         title, revision, folders = get_doc_details(dbx, doc_id)
-
-    #         # TODO: Handle multiple folders. For now, only folder is used, the
-    #         # first one. It may lead to some random behaviour if the return
-    #         # output of folders is not sorted and is random everytime. Make
-    #         # sure to check back on this ASAP.
-
-    #         doc_path = get_path(title, folders)
-    #         dbx.paper_docs_download_to_file(doc_path, doc_id, export_format)

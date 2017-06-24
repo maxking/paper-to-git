@@ -18,7 +18,8 @@ class Dropbox:
     def get_old_auth_token(self):
         # Check if the OAuth Flow has been performed before and thus doesn't
         # need to be done again. If yes, return the auth_token
-        return getattr(config.dropbox, 'api_token', None)
+        token = getattr(config.dropbox, 'api_token')
+        return None if token == '' else token
 
     def get_auth_token(self):
         old_token = self.get_old_auth_token()
@@ -38,8 +39,16 @@ class Dropbox:
         print("2. Click \"Allow\" (you might have to log in first).")
         print("3. Copy the authorization code.")
         auth_code = input("Enter the authorization code here: ").strip()
-        config.write_to_user_config('dropbox', 'api_token', auth_code)
-        return auth_code
+
+        try:
+            oauth_result = auth_flow.finish(auth_code)
+        except Exception as e:
+            print('Error: %s' % (e,))
+            return
+
+        config.write_to_user_config('dropbox', 'api_token',
+                                    oauth_result.access_token)
+        return oauth_result.access_token
 
 
 def initialize():

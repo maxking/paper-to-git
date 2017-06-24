@@ -20,5 +20,4 @@ class UpdateCommand(BaseCommand):
 
     def process(self, args):
         print("Pulling the list of paper docs...")
-        for doc in PaperDoc.get_docs():
-            print(doc)
+        PaperDoc.sync_docs()
