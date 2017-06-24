@@ -27,7 +27,7 @@ setup(
     long_description=read('README.md'),
     entry_points={
         'console_scripts': [
-            "paper_git = paper_to_git.bin.paper_git:main",
+            "paper-git = paper_to_git.bin.paper_git:main",
             ],
         },
     classifiers=[
