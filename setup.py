@@ -19,7 +19,7 @@ setup(
     version="0.1",
     author="Abhilash Raj",
     author_email="raj.abhilash1@gmail.com",
-    description="Sync between dropbox paper and any git repo.",
+    description="Sync between Dropbox Paper and any git repo.",
     license="MIT",
     keywords="dorpbox-paper git",
     url="https://github.com/maxking/paper-to-git",
