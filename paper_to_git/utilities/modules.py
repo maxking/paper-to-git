@@ -56,20 +56,6 @@ def find_components(package, base_class):
         yield from scan_module(module, base_class)
 
 
-def dropbox_api(function):
-    """
-    Attach a global dropbox handler with the function.
-    """
-    def func_wrapper(*args, **kwargs):
-        print(config)
-        dbx = config.dbox.dbx
-        if len(args) > 0:
-            return function(args[0], dbx, *args[1:], **kws)
-        else:
-            return function(dbx, **kws)
-    return func_wrapper
-
-
 class dbconnection(object):
     """
     """
@@ -84,3 +70,7 @@ class dbconnection(object):
         else:
             self.f(db, **kws)
         db.close()
+
+
+def create_file_name(name, extension='md'):
+    return '-'.join(name.split()) + '.' + extension
