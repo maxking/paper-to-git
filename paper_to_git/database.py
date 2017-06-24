@@ -23,10 +23,10 @@ class BaseDatabase:
         return self.db
 
     def _post_initialization(self):
-        from paper_to_git.models import PaperDoc, PaperFolder
+        from paper_to_git.models import PaperDoc, PaperFolder, Sync
         self.db.connect()
         try:
-            self.db.create_tables([PaperDoc, PaperFolder])
+            self.db.create_tables([PaperDoc, PaperFolder, Sync])
         except OperationalError:
             # The database already exists.
             pass
