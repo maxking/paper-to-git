@@ -45,6 +45,7 @@ class PaperDoc(BasePaperModel):
     version = IntegerField(default=0)
     folder = ForeignKeyField(PaperFolder, null=True, related_name='docs')
     last_updated = TimestampField()
+    last_published = TimestampField(null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -133,6 +134,7 @@ class Sync(BasePaperModel):
     # Path to the directories in the git repo.
     path_in_repo = CharField()
     folder = ForeignKeyField(PaperFolder)
+    last_run = TimestampField(null=True)
 
     def __repr__(self):
         return "Git repo at {} to Folder {}".format(repo, folder.name)
@@ -152,6 +154,8 @@ class Sync(BasePaperModel):
         git_repo.git.add(A=True)
         try:
             git_repo.git.commit('-m', 'A random git message.')
+            self.last_run = time.time()
+            self.save()
         except GitCommandError:
             print('Nothing to commit')
             pass
