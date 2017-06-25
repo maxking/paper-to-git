@@ -22,8 +22,24 @@ $ source dropbox-sdk/bin/activate
 $ python setup.py install
 ```
 
+
 Usage
 =====
+Web Interface
+-------------
+
+Paper-to-Git comes with a neat little Web Frontend written in Flask. You can run
+that by using:
+
+```bash
+$ paper-git serve
+```
+
+If this is your first time, you will have to authorize usage of your dropbox
+account. See more on that below.
+
+Commandline
+-----------
 
 You can run `paper-git --help` in the console to print out the help text.
 
