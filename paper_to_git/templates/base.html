@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang=en>
+  <head>
+      {% block title%}
+      {% endblock title %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+          crossorigin="anonymous">
+    {% block head %}
+    {% endblock head %}
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <a class="navbar-brand" href="#">Paper Git</a>
+        {% block navbar %}
+        {% endblock navbar%}
+      </nav>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+      <div id="content">{% block content %}{% endblock %}</div>
+      <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2017 by Abhilash Raj.
+        {% endblock footer %}
+      </div>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+              integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+              crossorigin="anonymous">
+      </script>
+    </div>
+  </body>
+</html>

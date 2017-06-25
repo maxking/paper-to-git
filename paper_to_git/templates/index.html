@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title> Paper Git </title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+{% endblock head %}
+
+{% block navbar %}
+<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navRefresh" aria-controls="navRefresh" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navRefresh">
+  <div class="navbar-nav">
+    
+  </div>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+
+<!-- As a link -->
+
+<div class="messages center">
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#documents" tole="tab">
+      Documents
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#folders" role="tab">
+      Folders
+    </a>
+  </li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="documents" role="tabpanel">
+
+    <p class="h3"> List of Documents
+    <a class="nav-link btn btn-outline-success pull-right" href="/refresh">Refresh</a></p>
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr>
+          <th> Name </th>
+          <th> Folder </th>
+          <th> Version </th>
+          <th> Updated </th>
+          <th></th>
+      </thead>
+      <tbody>
+        {% for doc in docs %}
+        <tr>
+          <td> {{ doc.title }} </td>
+          <td> {{ doc.folder.name }} </td>
+          <td> {{ doc.version }} </td>
+          <td> {{ doc.last_updated  }} </td>
+          <td> <a class="btn btn-primary fa fa-refresh update" href="#" id="{{ doc.paper_id }}"></a></td>
+          <td> <a class="btn btn-primary show_document" href="#" id="{{ doc.paper_id }}">Show</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane" id="folders" role="tabpanel">
+    <p class="h3"> List of Folders </p>
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr>
+          <th> Name </th>
+          <th> Documents </th>
+      </thead>
+      <tbody>
+        {% for folder in folders %}
+        <tr>
+          <td> {{ folder.name }} </td>
+          <td>
+            <ul>
+              {% for doc in folder.docs %}
+              <li>{{ doc.title }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body" id="modalbody">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $('a.update').click(function(){
+      $.post("/update/" + $(this).attr('id'), {},
+             function(response) {
+                 $('.messages').html('<div class="alert alert-dismissible fade show alert-' + response.type + '" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true"&times;</span> </button>' + response.message + '</div>')
+             })
+  });
+
+  $('a.show_document').click(function(){
+      $.get("/document/" + $(this).attr('id'), {},
+            function(response) {
+                $('#modalbody').html(response.document);
+                $('#modaltitle').html(response.title);
+                $('#exampleModalLong').modal('show')
+            })
+      
+  })
+</script>
+{% endblock content %}

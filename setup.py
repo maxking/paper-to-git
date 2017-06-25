@@ -38,6 +38,8 @@ setup(
     install_requires=[
         'dropbox',
         'flufl.lock',
+        'flask',
+        'markdown',
         'lazr.config',
         'peewee',
         'GitPython'
