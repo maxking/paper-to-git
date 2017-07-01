@@ -11,7 +11,7 @@
 </button>
 <div class="collapse navbar-collapse" id="navRefresh">
   <div class="navbar-nav">
-    
+
   </div>
 </div>
 {% endblock navbar %}
@@ -105,8 +105,9 @@
     </div>
   </div>
 </div>
+{% endblock content%}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{% block javascript %}
 <script type="text/javascript">
   $('a.update').click(function(){
       $.post("/update/" + $(this).attr('id'), {},
@@ -122,7 +123,7 @@
                 $('#modaltitle').html(response.title);
                 $('#exampleModalLong').modal('show')
             })
-      
+
   })
 </script>
-{% endblock content %}
+{% endblock javascript %}

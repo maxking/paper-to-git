@@ -4,20 +4,25 @@ Flask App for Paper Git as a front end.
 import markdown
 
 from flask import (
-    Flask, render_template, redirect, url_for, jsonify, flash, Markup)
+    Flask, render_template, redirect, url_for, jsonify, flash, Markup,
+    send_from_directory)
 from paper_to_git.models import PaperDoc, PaperFolder
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.secret_key = 'thenewsecretkeyforflashingandsessionmanagement'
+
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('templates/static', path)
 
 
 @app.route('/', methods=['GET'])
 def index():
-    docs = PaperDoc.select()
     return render_template('index.html',
-                           docs=PaperDoc.select().order_by(PaperDoc.last_updated.desc()),
-                           folders=PaperFolder.select())
+        docs=PaperDoc.select().order_by(PaperDoc.last_updated.desc()),
+        folders=PaperFolder.select())
 
 
 @app.route('/update/<doc_id>', methods=['POST'])
