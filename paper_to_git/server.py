@@ -2,6 +2,7 @@
 Flask App for Paper Git as a front end.
 """
 import markdown
+import traceback
 
 from flask import (
     Flask, render_template, redirect, url_for, jsonify, flash, Markup,
@@ -31,6 +32,22 @@ def update_document(doc_id):
     doc.get_changes()
     return jsonify(message="The document was successfully updated",
                    type="success")
+
+
+@app.route('/publish/<doc_id>', methods=['POST'])
+def publish_document(doc_id):
+    doc = PaperDoc.get_by_paper_id(doc_id)
+    _, final_path = doc.sync_path
+    try:
+        doc.publish()
+        print("{} was published".format(doc))
+        return jsonify(message="Document successfully published at {}".format(final_path),  # noqa
+                       type="success")
+    except Exception as e:
+        print("Error {0} occurred while publishing {1}".format(str(e), doc))
+        traceback.print_exc()
+        return jsonify(message="Error occurred while publishing\n{}".format(str(e)),       # noqa
+                       type="danger")
 
 
 @app.route('/document/<doc_id>', methods=['GET'])

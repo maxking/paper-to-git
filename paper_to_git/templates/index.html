@@ -50,6 +50,7 @@
           <th> Version </th>
           <th> Updated </th>
           <th></th>
+          <th></th>
       </thead>
       <tbody>
         {% for doc in docs %}
@@ -60,6 +61,8 @@
           <td> {{ doc.last_updated  }} </td>
           <td> <a class="btn btn-primary fa fa-refresh update" href="#" id="{{ doc.paper_id }}"></a></td>
           <td> <a class="btn btn-primary show_document" href="#" id="{{ doc.paper_id }}">Show</a></td>
+          <td> <a class="btn btn-primary publish_document" href="#" id="{{ doc.paper_id }}">Publish</a></td>
+          <td> </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -109,21 +112,34 @@
 
 {% block javascript %}
 <script type="text/javascript">
-  $('a.update').click(function(){
-      $.post("/update/" + $(this).attr('id'), {},
-             function(response) {
-                 $('.messages').html('<div class="alert fade show alert-' + response.type + ' alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true"&times;</span> </button>' + response.message + '</div>')
-             })
+    function update_messages(message_type, message) {
+                 $("div.messages").html('<div class="alert fade show alert-' + message_type + ' alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>' + message + '</div>')
+    };
+
+    $("a.update").click(function(){
+        $.post("/update/" + $(this).attr("id"), {},
+            function(response) {
+                 update_message(response.type, response.message);
+            }
+        )
+     });
+
+    $("a.show_document").click(function(){
+        $.get("/document/" + $(this).attr("id"), {},
+           function(response) {
+               $("#modalbody").html(response.document);
+               $("#modaltitle").html(response.title);
+               $("#exampleModalLong").modal("show")
+           })
+    });
+
+    $("a.publish_document").click(function(){
+        $.post("/publish/" + $(this).attr("id"), {},
+            function(response) {
+                update_messages(response.type, response.message);
+            }
+        )
   });
 
-  $('a.show_document').click(function(){
-      $.get("/document/" + $(this).attr('id'), {},
-            function(response) {
-                $('#modalbody').html(response.document);
-                $('#modaltitle').html(response.title);
-                $('#exampleModalLong').modal('show')
-            })
-
-  })
 </script>
 {% endblock javascript %}

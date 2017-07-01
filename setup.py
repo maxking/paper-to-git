@@ -36,6 +36,7 @@ setup(
         "License :: MIT",
         ],
     install_requires=[
+        'ipython',
         'dropbox',
         'flufl.lock',
         'flask',
