@@ -20,11 +20,11 @@ class AddCommand(BaseCommand):
 
     def add(self, parser, command_parser):
         self.parser = parser
-        command_parser.add_argument('--repo',
+        command_parser.add_argument('--repo', required=True,
                                     help='The path to the git repo.')
-        command_parser.add_argument('--path',
+        command_parser.add_argument('--path', required=True,
                                     help='The path inside the repo')
-        command_parser.add_argument('--folder',
+        command_parser.add_argument('--folder', required=True,
                                     help='The folder name in the Paper')
 
     def process(self, args):

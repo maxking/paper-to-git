@@ -23,6 +23,10 @@ def search_for_configuration_file():
         os.path.join('var', 'etc', 'paper-git.cfg'))
     if os.path.exists(config_path):
         return config_path
+    # /etc/paper-git.cfg
+    config_path = os.path.join('/etc', 'paper-git.cfg')
+    if os.path.exists(config_path):
+        return config_path
     # None of the above configuration files exists.
     return None
 

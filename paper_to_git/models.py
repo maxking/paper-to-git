@@ -53,7 +53,8 @@ class PaperDoc(BasePaperModel):
         super().__init__(*args, **kwargs)
 
     def __repr__(self):
-        return "Document {} at version {}".format(self.title, self.version)
+        return "{}: Document {} at version {}".format(
+            self.id, self.title, self.version)
 
     @classmethod
     def get_by_paper_id(self, paper_id):
@@ -99,7 +100,7 @@ class PaperDoc(BasePaperModel):
                 doc = PaperDoc.create(paper_id=doc_id, title=title, version=rev,
                                       last_updated=time.time())
                 doc.update_folder_info()
-            print(doc)
+                print(doc)
 
     @classmethod
     @dropbox_api
@@ -138,6 +139,8 @@ class PaperDoc(BasePaperModel):
             try:
                 sync = Sync.get(folder=self.folder)
                 sync.sync_single(doc=self, commit=True)
+                self.last_published = time.time()
+                self.save()
             except Sync.DoesNotExist:
                 raise NoDestinationError
             except DocDoesNotExist:
@@ -180,7 +183,8 @@ class Sync(BasePaperModel):
     last_run = TimestampField(null=True)
 
     def __repr__(self):
-        return "Git repo at {} to Folder {}".format(self.repo, self.folder.name)
+        return "Folder {} to Git repo at {} at path {}".format(
+            self.folder.name, self.repo, self.path_in_repo)
 
     def sync(self, commit=True):
         for doc in self.folder.docs:

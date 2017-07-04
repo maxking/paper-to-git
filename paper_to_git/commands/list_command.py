@@ -3,7 +3,7 @@ List the Documents and Folders
 """
 
 from paper_to_git.commands.base import BaseCommand
-from paper_to_git.models import PaperDoc, PaperFolder
+from paper_to_git.models import PaperDoc, PaperFolder, Sync
 
 __all__ = [
     'ListCommand',
@@ -25,6 +25,9 @@ class ListCommand(BaseCommand):
         command_parser.add_argument('-fd', '--folders',
             default=False, action='store_true',
             help=("""List all folders in Dropbox Paper"""))
+        command_parser.add_argument('-sc', '--sync',
+            default=False, action='store_true',
+            help=("""List all the sync objects"""))
 
     def process(self, args):
         if args.docs:
@@ -37,5 +40,13 @@ class ListCommand(BaseCommand):
                 for doc in folder.docs:
                     print('|----{}'.format(doc))
 
-        if not (args.docs or args.folders):
-            print("Please provide atleast one of the --docs or --folders flags")
+        if args.sync:
+            for sync in Sync.select():
+                print(sync)
+
+        if not (args.docs or args.folders or args.sync):
+            # if no args provided, list all the documents that were recently
+            # updated.
+            for doc in PaperDoc.select().order_by(
+                    PaperDoc.last_updated.desc()).limit(5):
+                print(doc)
