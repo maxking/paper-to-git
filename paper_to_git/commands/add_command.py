@@ -30,7 +30,11 @@ class AddCommand(BaseCommand):
     def process(self, args):
         repo = os.path.abspath(args.repo)
         path = args.path
+        paper_folder = None
         for folder in PaperFolder.select():
             if folder.name.lower() == args.folder.lower():
                 paper_folder = folder
+        if paper_folder is None:
+            print("No such PaperFolder exists!")
+            return
         Sync.create(repo=repo, path_in_repo=path, folder=paper_folder)
