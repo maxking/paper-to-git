@@ -11,8 +11,8 @@ __all__ = [
 
 METADATA_TEMPLATE = Template("""\
 ---
-title: $title
-date: $date
+title: "$title"
+date: "$date"
 ---
 
 """)
