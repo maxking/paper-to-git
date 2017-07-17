@@ -1,6 +1,6 @@
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from string import Template
 
 
@@ -23,7 +23,7 @@ setup(
     license="MIT",
     keywords="dorpbox-paper git",
     url="https://github.com/maxking/paper-to-git",
-    packages=['paper_to_git'],
+    packages=find_packages(),
     long_description=read('README.md'),
     entry_points={
         'console_scripts': [
