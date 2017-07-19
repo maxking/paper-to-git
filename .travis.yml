@@ -7,4 +7,4 @@ python:
 install: pip install -U flake8 pytest
 script:
   - python -m flake8 src
-  - pytest
+  - python setup.py develop && pytest
