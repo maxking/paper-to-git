@@ -4,7 +4,7 @@ python:
   - 3.5
   - 3.6
   - 3.6-dev
-install: pip install flake8 pytest
+install: pip install -U flake8 pytest
 script:
   - python -m flake8 src
-  - pytest
+  - python setup.py develop && pytest
