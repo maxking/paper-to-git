@@ -2,8 +2,8 @@
 List the Documents and Folders
 """
 
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.models import PaperDoc, PaperFolder, Sync
+from papergit.commands.base import BaseCommand
+from papergit.models import PaperDoc, PaperFolder, Sync
 
 __all__ = [
     'ListCommand',

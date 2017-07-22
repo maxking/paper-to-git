@@ -1,7 +1,7 @@
 import dropbox
 
 from dropbox import DropboxOAuth2FlowNoRedirect
-from paper_to_git.config import config
+from papergit.config import config
 
 
 class Dropbox:

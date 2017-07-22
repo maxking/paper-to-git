@@ -1,8 +1,8 @@
 """
 """
 
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.models import PaperDoc
+from papergit.commands.base import BaseCommand
+from papergit.models import PaperDoc
 
 
 __all__ = [

@@ -4,7 +4,7 @@ import pytest
 from io import StringIO
 from unittest.mock import patch
 
-from paper_to_git.bin.paper_git import main
+from papergit.bin.paper_git import main
 
 
 class TestPaperGitCommand(object):

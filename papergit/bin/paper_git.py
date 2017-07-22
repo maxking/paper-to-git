@@ -1,11 +1,13 @@
-"""The paper_git command dispatcher"""
+#! /usr/bin/env python3
+
+"""The paper-git command dispatcher"""
 
 
 import argparse
 
-from paper_to_git.core import initialize
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.utilities.modules import find_components
+from papergit.core import initialize
+from papergit.commands.base import BaseCommand
+from papergit.utilities.modules import find_components
 
 
 def main():
@@ -18,7 +20,7 @@ def main():
 
     subparser = parser.add_subparsers(title='Commands')
     subcommands = []
-    for command_class in find_components('paper_to_git.commands', BaseCommand):
+    for command_class in find_components('papergit.commands', BaseCommand):
         command = command_class()
         assert issubclass(command_class, BaseCommand)
         subcommands.append(command)

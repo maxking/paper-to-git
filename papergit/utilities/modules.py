@@ -7,7 +7,7 @@ import sys
 from contextlib import suppress
 from string import Template
 from pkg_resources import resource_listdir
-from paper_to_git.config import config
+from papergit.config import config
 
 __all__ = [
     'expand',

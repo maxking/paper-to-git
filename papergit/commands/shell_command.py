@@ -1,8 +1,8 @@
 import sys
 
 from functools import partial
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.config import config
+from papergit.commands.base import BaseCommand
+from papergit.config import config
 
 __all__ = [
     'ShellCommand'

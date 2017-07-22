@@ -23,7 +23,7 @@ class BaseDatabase:
         return self.db
 
     def _post_initialization(self):
-        from paper_to_git.models import PaperDoc, PaperFolder, Sync
+        from papergit.models import PaperDoc, PaperFolder, Sync
         self.db.connect()
         try:
             self.db.create_tables([PaperDoc, PaperFolder, Sync])

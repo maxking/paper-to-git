@@ -6,11 +6,11 @@ import dropbox.exceptions
 
 from dropbox.paper import ExportFormat
 from git import Repo, GitCommandError
-from paper_to_git.errors import NoDestinationError, DocDoesNotExist
-from paper_to_git.utilities.dropbox import dropbox_api
-from paper_to_git.utilities.modules import create_file_name
-from paper_to_git.utilities.general import generate_metadata
-from paper_to_git.config import config
+from papergit.errors import NoDestinationError, DocDoesNotExist
+from papergit.utilities.dropbox import dropbox_api
+from papergit.utilities.modules import create_file_name
+from papergit.utilities.general import generate_metadata
+from papergit.config import config
 from peewee import ( Model, CharField, ForeignKeyField, IntegerField,
                      TimestampField, PrimaryKeyField)
 

@@ -10,11 +10,11 @@ import sys
 
 from flufl.lock import Lock
 from lazr.config import ConfigSchema
-from paper_to_git.utilities.modules import makedirs
+from papergit.utilities.modules import makedirs
 from pkg_resources import resource_filename
 from string import Template
 
-from paper_to_git.database import BaseDatabase
+from papergit.database import BaseDatabase
 
 __all__ = [
     'BaseConfig',
@@ -52,9 +52,9 @@ class BaseConfig:
     def load(self, filename=None):
         """Load the configuration from config files.
         """
-        schema_file = resource_filename('paper_to_git.config', 'schema.cfg')
+        schema_file = resource_filename('papergit.config', 'schema.cfg')
         schema = ConfigSchema(schema_file)
-        config_file = resource_filename('paper_to_git.config', 'paper-git.cfg')
+        config_file = resource_filename('papergit.config', 'paper-git.cfg')
         self._config = schema.load(config_file)
         if filename is None:
             self._post_process()

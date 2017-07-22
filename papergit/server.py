@@ -7,7 +7,7 @@ import traceback
 from flask import (
     Flask, render_template, redirect, url_for, jsonify, flash, Markup,
     send_from_directory)
-from paper_to_git.models import PaperDoc, PaperFolder
+from papergit.models import PaperDoc, PaperFolder
 
 
 app = Flask(__name__, static_url_path='')
