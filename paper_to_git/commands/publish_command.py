@@ -21,6 +21,9 @@ class PublishCommand(BaseCommand):
         self.parser = parser
         command_parser.add_argument('id',
                                     help="The Paper Document to publish.")
+        command_parser.add_argument(
+            '--push', action='store_true', default=False,
+            help="Push changes to the remote origin after commit.")
 
     def process(self, args):
         try:
@@ -30,7 +33,7 @@ class PublishCommand(BaseCommand):
             return
 
         try:
-            doc.publish()
+            doc.publish(push=args.push)
         except NoDestinationError:
             print("This Document hasn't been setup with a git repo...")
             print("Please first add to a repo.")
