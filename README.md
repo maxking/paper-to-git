@@ -20,7 +20,7 @@ To install, try out the following commands:
 ```bash
 $ virtualenv dropbox-sdk --python=python3
 $ source dropbox-sdk/bin/activate
-$ python setup.py install
+$ python setup.py develop
 ```
 
 
@@ -65,6 +65,9 @@ Enter the authorization code here: <authorization code>
 This will store your authorization token in the user configuration file at
 `var/etc/paper-git.cfg`.
 
+If you want this configuration to persist from anywhere, just copy
+`var/etc/paper-git.cfg` to `/etc/paper-git.cfg`.
+
 After this, you can run `update command to pull the list of all the docs`:
 
 ```
@@ -72,7 +75,11 @@ $ paper-git update
 ```
 
 Note that update command doesn't pull changes in the already exsting docs in the
-database.
+database. To update an existing document in the database try:
+
+```
+$ paper-git update <doc-id>
+```
 
 You can list all the docs in the database using:
 
@@ -97,16 +104,23 @@ Note that the `<paper-folder-name>` in the above command is
 case-insensitive. Once you replace all the variables and the above command runs
 successfully, you have added a new rule to sync the documents.
 
-To run all the rules, try:
+After you have add a new rule, now you can publish your documents to their
+respective. `publish` command will copy the downloaded files to their new
+destination along with some added metadata that most common static site
+generators expect.
 
-```bash
-$ paper-git sync
+While the addition of metadata can be turned off if needed, it is turned on by
+defualt for now.
+
+```
+$ paper-git publish <doc-id>
 ```
 
 Note that this will only work for changes that have already been pulled down
 using the `update` command.
 
-You can play `paper-git` using an interactive shell by using the `shell` command:
+You can play `paper-git` using an interactive shell by using the `shell`
+command:
 
 ```bash
 $ paper-git shell
@@ -132,9 +146,9 @@ In [3]: from paper_to_git.models import PaperDoc
 In [4]: for doc in PaperDoc.select():
    ...:     print(doc)
    ...:
-Document <1>
-Document <2>
-Document <3>
+1: Document <1>
+2: Document <2>
+3: Document <3>
 ```
 
 You can also force sync of a Doc, which you have changed:
