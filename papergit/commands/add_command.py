@@ -3,8 +3,8 @@ Add a new sync object to sync between a git repo and Dropbox Paper.
 """
 import os
 
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.models import Sync, PaperFolder
+from papergit.commands.base import BaseCommand
+from papergit.models import Sync, PaperFolder
 
 
 __all__ = [

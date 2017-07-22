@@ -2,7 +2,7 @@
 """
 
 from string import Template
-from paper_to_git.config import config
+from papergit.config import config
 
 __all__ = [
     'generate_metadata',

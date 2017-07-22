@@ -2,9 +2,9 @@
 Publish a document.
 """
 
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.models import PaperDoc
-from paper_to_git.errors import NoDestinationError
+from papergit.commands.base import BaseCommand
+from papergit.models import PaperDoc
+from papergit.errors import NoDestinationError
 
 __all__ = [
     'PublishCommand',

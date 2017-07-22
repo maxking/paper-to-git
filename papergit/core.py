@@ -2,10 +2,10 @@
 """
 
 import os
-import paper_to_git.config.config
-import paper_to_git.dropbox
+import papergit.config.config
+import papergit.dropbox
 
-from paper_to_git.utilities.modules import expand
+from papergit.utilities.modules import expand
 
 __all__ = [
     'initialize',
@@ -45,15 +45,15 @@ def initialize_1(config_path=None, testing=False):
     # Initialize the configuration first.
     if config_path is None:
         config_path = search_for_configuration_file()
-        paper_to_git.config.config.load(config_path)
+        papergit.config.config.load(config_path)
     # Next, initialize the database.
 
 
 def initialize_2():
-    config = paper_to_git.config.config
+    config = papergit.config.config
     url = expand(config.database.url, config.paths)
     # Instantiate the database class, then initialize it. Then stash the object
     # on the config object.
     config.db.initialize(url)
     # Initialize the dropbox object and add it to the config.
-    paper_to_git.dropbox.initialize()
+    papergit.dropbox.initialize()

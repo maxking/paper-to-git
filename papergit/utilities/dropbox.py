@@ -9,7 +9,7 @@ def dropbox_api(function):
     """
     def func_wrapper(*args, **kws):
         # Avoid circular imports.
-        from paper_to_git.config import config
+        from papergit.config import config
         dbx = config.dbox.dbx
         if len(args) > 0:
             return function(args[0], dbx, *args[1:], **kws)

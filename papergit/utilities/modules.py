@@ -7,7 +7,7 @@ import sys
 from contextlib import suppress
 from string import Template
 from pkg_resources import resource_listdir
-from paper_to_git.config import config
+
 
 __all__ = [
     'expand',
@@ -63,6 +63,7 @@ class dbconnection(object):
         self.f = f
 
     def __call__(self, *args, **kws):
+        from papergit.config import config
         db = config.db.db
         db.connect()
         if len(args) > 0:

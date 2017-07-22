@@ -2,8 +2,8 @@
 Run a flask serve as the GUI for paper-to-git.
 """
 
-from paper_to_git.commands.base import BaseCommand
-from paper_to_git.server import app
+from papergit.commands.base import BaseCommand
+from papergit.server import app
 
 __all__ = [
     'ServeCommand'
