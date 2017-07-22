@@ -37,4 +37,7 @@ class AddCommand(BaseCommand):
         if paper_folder is None:
             print("No such PaperFolder exists!")
             return
+        if not os.path.exists(os.path.join(repo, path)):
+            print("The destination path to git repo doesn't exist...")
+            return
         Sync.create(repo=repo, path_in_repo=path, folder=paper_folder)

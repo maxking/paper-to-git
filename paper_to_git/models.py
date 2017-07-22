@@ -124,7 +124,7 @@ class PaperDoc(BasePaperModel):
         self.folder = f
         self.save()
 
-    def publish(self):
+    def publish(self, push=False):
         """Publish the document as a blog post.
         Process:
         - Find if this document belongs to a PaperFolder,
@@ -138,14 +138,14 @@ class PaperDoc(BasePaperModel):
         if self.folder:
             try:
                 sync = Sync.get(folder=self.folder)
-                sync.sync_single(doc=self, commit=True)
+                sync.sync_single(doc=self, commit=True, push=push)
                 self.last_published = time.time()
                 self.save()
             except Sync.DoesNotExist:
                 raise NoDestinationError
             except DocDoesNotExist:
                 self.download_doc()
-                self.publish()
+                self.publish(push=push)
             return True
         raise NoDestinationError
 
@@ -186,20 +186,20 @@ class Sync(BasePaperModel):
         return "Folder {} to Git repo at {} at path {}".format(
             self.folder.name, self.repo, self.path_in_repo)
 
-    def sync(self, commit=True):
+    def sync(self, commit=True, push=False):
         for doc in self.folder.docs:
-            self.sync_single(doc, commit=False)
+            self.sync_single(doc, commit=False, push=False)
         if commit:
-            self.commit_changes()
+            self.commit_changes(push=push)
 
-    def sync_single(self, doc, commit=True):
+    def sync_single(self, doc, commit=True, push=False):
         original_path, final_path = self.get_doc_sync_path(doc)
-        with open(final_path, 'w') as fp:
+        with open(final_path, 'w+') as fp:
             print(generate_metadata(doc=doc), file=fp)
             with open(original_path, 'r') as op:
                 print(op.read(), file=fp)
         if commit:
-            self.commit_changes()
+            self.commit_changes(push=push)
 
     def get_doc_sync_path(self, doc):
         original_path = PaperDoc.generate_file_path(doc.paper_id)
@@ -207,13 +207,15 @@ class Sync(BasePaperModel):
         final_path = os.path.join(self.repo, self.path_in_repo, file_name)
         return (original_path, final_path)
 
-    def commit_changes(self):
+    def commit_changes(self, push=False):
         git_repo = Repo(self.repo)
-        git_repo.git.add(A=True)
+        git_repo.git.add('content/')
         try:
-            git_repo.git.commit('-m', 'A random git message.')
+            git_repo.git.commit('-m', 'Commit added by PaperGit')
             self.last_run = time.time()
             self.save()
         except GitCommandError:
             print('Nothing to commit')
-            pass
+        if push:
+            print("Pushing changes to remote")
+            git_repo.git.push('origin')
