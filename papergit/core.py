@@ -45,7 +45,7 @@ def initialize_1(config_path=None, testing=False):
     # Initialize the configuration first.
     if config_path is None:
         config_path = search_for_configuration_file()
-        papergit.config.config.load(config_path)
+    papergit.config.config.load(config_path)
     # Next, initialize the database.
 
 
