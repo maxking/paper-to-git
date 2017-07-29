@@ -5,9 +5,9 @@ __all__ = [
 ]
 
 
-def mock_os_exists(path):
+def mock_os_exists(path, original_func, value=True):
     def do_mock(input_arg):
         if input_arg == path:
-            return True
-        return os.path.exists(input_arg)
+            return value
+        return original_func(input_arg)
     return do_mock
