@@ -16,7 +16,7 @@ scripts = set(template.substitute(script=script)
 
 setup(
     name="papergit",
-    version="0.1.3",
+    version="0.1.4",
     author="Abhilash Raj",
     author_email="raj.abhilash1@gmail.com",
     description="Sync between Dropbox Paper and any git repo.",

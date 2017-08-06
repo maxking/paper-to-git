@@ -18,9 +18,7 @@ Install
 To install, try out the following commands:
 
 ```bash
-$ virtualenv dropbox-sdk --python=python3
-$ source dropbox-sdk/bin/activate
-$ python setup.py develop
+$ pip install papergit
 ```
 
 
