@@ -1,7 +1,11 @@
 import os
-from unittest.mock import patch
+import peewee
+import pytest
 
-from papergit.core import search_for_configuration_file
+from unittest.mock import patch
+from papergit.config import config
+from papergit.core import (
+    search_for_configuration_file, initialize_1, initialize_2)
 from papergit.utilities.testing import mock_os_exists
 
 
@@ -35,3 +39,54 @@ class TestInitialization(object):
         # No configuration file exists.
         with patch('os.path.exists', return_value=False):
             assert search_for_configuration_file() is None
+
+    def test_initialize_1_with_config(self, tmpdir_factory):
+        var_dir = tmpdir_factory.mktemp('temp_var')
+        test_config = var_dir.join('paper-git.cfg')
+        with test_config.open(ensure=True, mode='w') as fp:
+            print("""
+[dropbox]
+api_token: thisisarandomvalueofapitoken
+            """, file=fp)
+        with var_dir.as_cwd():
+            assert not config.initialized
+            initialize_1(config_path=str(test_config))
+        assert config.initialized
+        assert config.dropbox.api_token == 'thisisarandomvalueofapitoken'
+
+    def test_initialize_1_without_config(self, tmpdir_factory):
+        var_dir = tmpdir_factory.mktemp('temp_var')
+        test_config = var_dir.join('paper-git.cfg')
+        with test_config.open(ensure=True, mode='w') as fp:
+            print("""
+[dropbox]
+api_token: thisisadifferentapitoken
+            """, file=fp)
+        with var_dir.as_cwd():
+            initialize_1()
+        assert config.initialized
+        assert config.dropbox.api_token == 'thisisadifferentapitoken'
+
+    def test_initialize_2(self, tmpdir_factory):
+        var_dir = tmpdir_factory.mktemp('temp_var')
+        test_config = var_dir.join('paper-git.cfg')
+        with test_config.open(ensure=True, mode='w') as fp:
+            print("""
+[dropbox]
+api_token: thisisanotherapikey
+            """, file=fp)
+        with var_dir.as_cwd():
+            initialize_1()
+        assert config.initialized
+        assert config.dropbox.api_token == 'thisisanotherapikey'
+        assert config.dbox is None
+        assert config.db.url is None
+        with pytest.raises(peewee.OperationalError):
+            config.db.db.connect()
+        # Now we will initialize the database and dropbox.
+        initialize_2()
+        # Make sure that the database connection works.
+        assert config.db.url is not None
+        assert set(config.db.db.get_tables()) == set([
+            'paperdoc', 'paperfolder', 'sync'])
+        assert config.dbox is not None
