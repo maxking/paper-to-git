@@ -29,3 +29,6 @@ def initialize_fixture(tmpdir_factory, request):
         print("\nTearing down ...\n")
 
     request.addfinalizer(teardown)
+
+    with testing_dir.as_cwd():
+        yield
