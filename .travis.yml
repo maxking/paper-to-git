@@ -5,9 +5,9 @@ python:
   - 3.6
   - 3.6-dev
 install:
-  - pip install urllib3==1.21.1
+  - pip install urllib3==1.21.1 pytest-cov
   - python setup.py develop
   - pip install -U flake8 pytest
 script:
   - python -m flake8 src
-  - pytest
+  - pytest --cov-report term-missing --cov=papergit papergit/

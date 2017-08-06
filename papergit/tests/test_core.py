@@ -5,7 +5,7 @@ import pytest
 from unittest.mock import patch
 from papergit.config import config
 from papergit.core import (
-    search_for_configuration_file, initialize_1, initialize_2)
+    search_for_configuration_file, initialize_1, initialize)
 from papergit.utilities.testing import mock_os_exists
 
 
@@ -75,16 +75,12 @@ api_token: thisisadifferentapitoken
 [dropbox]
 api_token: thisisanotherapikey
             """, file=fp)
-        with var_dir.as_cwd():
-            initialize_1()
-        assert config.initialized
-        assert config.dropbox.api_token == 'thisisanotherapikey'
         assert config.dbox is None
         assert config.db.url is None
         with pytest.raises(peewee.OperationalError):
             config.db.db.connect()
-        # Now we will initialize the database and dropbox.
-        initialize_2()
+        with var_dir.as_cwd():
+            initialize()
         # Make sure that the database connection works.
         assert config.db.url is not None
         assert set(config.db.db.get_tables()) == set([
