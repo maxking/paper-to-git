@@ -7,6 +7,7 @@ from unittest.mock import patch
 from papergit.bin.paper_git import main
 
 
+@pytest.mark.usefixtures('initialize_fixture')
 class TestPaperGitCommand(object):
     """Tests for the main paper-git command."""
 
@@ -36,5 +37,5 @@ class TestPaperGitCommand(object):
         with patch('sys.argv', testargs), \
                 patch('sys.stdout', output), patch('sys.stderr', error):
             main()
-        assert '' in output.getvalue()
-        assert '' in error.getvalue()
+        assert output.getvalue() == ''
+        assert error.getvalue() == ''
