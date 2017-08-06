@@ -16,7 +16,7 @@ api_token: SomeRandomApiToken
 """)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def initialize_fixture(tmpdir_factory, request):
     print("\nInitializing tests ...\n")
     testing_dir = tmpdir_factory.mktemp('var')
