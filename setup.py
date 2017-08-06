@@ -16,7 +16,7 @@ scripts = set(template.substitute(script=script)
 
 setup(
     name="papergit",
-    version="0.1",
+    version="0.1.3",
     author="Abhilash Raj",
     author_email="raj.abhilash1@gmail.com",
     description="Sync between Dropbox Paper and any git repo.",
@@ -29,17 +29,17 @@ setup(
     entry_points={
         'console_scripts': [
             "paper-git = papergit.bin.paper_git:main",
-            ],
-        },
+        ],
+    },
     classifiers=[
-        "Development Status :: Alpha",
+        "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
-        "License :: MIT",
+        "License :: OSI Approved :: MIT License",
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
 
-        ],
+    ],
     install_requires=[
         'ipython',
         'dropbox',
@@ -49,5 +49,5 @@ setup(
         'lazr.config',
         'peewee',
         'GitPython'
-        ]
-    )
+    ]
+)
