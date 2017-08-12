@@ -76,13 +76,13 @@ api_token: thisisadifferentapitoken
 api_token: thisisanotherapikey
             """, file=fp)
         assert config.dbox is None
-        assert config.db.url is None
+        assert config.db.path is None
         with pytest.raises(peewee.OperationalError):
             config.db.db.connect()
         with var_dir.as_cwd():
             initialize()
         # Make sure that the database connection works.
-        assert config.db.url is not None
+        assert config.db.path is not None
         assert set(config.db.db.get_tables()) == set([
             'paperdoc', 'paperfolder', 'sync'])
         assert config.dbox is not None

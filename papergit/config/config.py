@@ -19,7 +19,7 @@ from papergit.database import BaseDatabase
 __all__ = [
     'BaseConfig',
     'TestingConfig',
-    ]
+]
 
 SPACERS = '\n'
 
@@ -41,7 +41,7 @@ class BaseConfig:
         self.filename = None
         self.initialized = False
         self.dbox = None
-        self.db = BaseDatabase(None)
+        self.db = BaseDatabase()
 
     def __getattr__(self, name):
         return getattr(self._config, name)
