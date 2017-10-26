@@ -161,7 +161,7 @@ Update revision for doc <Doc> from 54 to 69
 License:
 ========
 
-This project is licensed under MIT License. Please see the LICENSE file for a
+This project is licensed under Apache License 2.0. Please see the LICENSE file for a
 complete copy of license.
 
 
