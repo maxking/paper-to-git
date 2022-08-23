@@ -10,7 +10,7 @@ from flask import (
 from papergit.models import PaperDoc, PaperFolder
 
 
-app = Flask(__name__, static_url_path='')
+app = Flask('papergit', static_url_path='')
 app.secret_key = 'thenewsecretkeyforflashingandsessionmanagement'
 
 
@@ -21,6 +21,7 @@ def send_static(path):
 
 @app.route('/', methods=['GET'])
 def index():
+    print(app.root_path)
     return render_template('index.html',
         docs=PaperDoc.select().order_by(PaperDoc.last_updated.desc()),
         folders=PaperFolder.select())
